@@ -63,10 +63,10 @@ class AppSettings(BaseSettings):
 class DBSettings(BaseSettings):
     """数据库配置"""
 
-    db_type: Literal["mysql", "postgresql"] = "mysql"
+    db_type: Literal["mysql", "postgresql"] = "postgresql"
     db_host: str = "127.0.0.1"
-    db_port: int = 3306
-    db_username: str = "root"
+    db_port: int = 5432
+    db_username: str = "postgres"
     db_password: str = "terry123"
     db_database: str = "fastapi-demo"
 
@@ -113,6 +113,25 @@ class DBSettings(BaseSettings):
     )
 
 
+class RedisSettings(BaseSettings):
+    """
+    Redis配置
+    """
+
+    redis_host: str = "127.0.0.1"
+    redis_port: int = 6379
+    redis_username: str = ""
+    redis_password: str = ""
+    redis_database: int = 2
+    redis_database_kc: int = 3
+
+    @computed_field
+    @property
+    def REDIS_URL(self) -> str:
+        return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_database}:"
+
+
 # 或者分别导出（更推荐，显式清晰）
 app_settings = AppSettings()
 db_settings = DBSettings()
+redis_settings = RedisSettings()
